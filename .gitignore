@@ -1,0 +1,12 @@
+# WLAN-Zugangsdaten und persoenliche Haltestelle bleiben lokal
+include/config.h
+
+# PlatformIO-Build-Artefakte
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# Editor / System
+.vscode/
+.DS_Store
+Thumbs.db

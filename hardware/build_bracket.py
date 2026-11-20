@@ -154,9 +154,11 @@ def part_housing():
     post_y = FRONT_IN + post_h / 2
     add = [cyy(POST_R, post_h, x, post_y, zc + z) for x, z in P]
     m = uni(m, *add)
-    # Gewinde fuer den Querbalken (von oben durch die Deckwand)
-    m = dif(m, *[cyz(1.7, 8, lx, 0, GH_H - 1.0) for lx in SCREW_LOCAL])
-    m = dif(m, *[cyy(PILOT_R, post_h + 8, x, post_y, zc + z) for x, z in P])
+    # Stege unter der Deckwand: geben der Schraube echtes Gewinde (Wand allein 2,5)
+    m = uni(m, *[bx(7.0, 7.0, 4.0, lx, 0, GH_H - WALL - 2.0) for lx in SCREW_LOCAL])
+    # Gewinde fuer den Querbalken (von oben durch die Deckwand) -- Kernloch M3
+    m = dif(m, *[cyz(1.25, 9, lx, 0, GH_H - 1.5) for lx in SCREW_LOCAL])
+    m = dif(m, *[cyy(PILOT_R, 9.0, x, post_y + 1.5, zc + z) for x, z in P])   # Sackloch, 3 mm Rest
     return m
 
 def part_cover():
@@ -171,7 +173,7 @@ def part_cover():
             m = uni(m, bx(8.0, PAD_T, 8.0, sx * (BOARD_W / 2 - 6.0), pad_y,
                           zc + sz * (BOARD_H / 2 - 6.0)))
     px, pz, P = posts()
-    m = dif(m, *[cyy(1.4, BACK_T + 6, x, GH_D / 2 + BACK_T / 2, zc + z) for x, z in P])
+    m = dif(m, *[cyy(1.6, BACK_T + 6, x, GH_D / 2 + BACK_T / 2, zc + z) for x, z in P])
     lx = POLE_X - PANEL_X                                # Kabelstutzen auf Mastachse
     lz = CABLE_Z - SIGN_Z0
     m = uni(m, cyy(6.0, 11.0, lx, GH_D / 2 + 5.5, lz))   # Stutzen zur Mastwand
@@ -186,27 +188,30 @@ def part_crossbar():
               (BAR_X0 + BAR_X1) / 2, 0, BAR_H / 2)
     arm = bx(2 * ARM_HW, ARM_Y1 - BAR_Y1, BAR_H, POLE_X, (BAR_Y1 + ARM_Y1) / 2, BAR_H / 2)
     m = uni(rail, arm)
-    m = dif(m, *[cyz(1.25, 6, lx, 0, 1.0) for lx in SCREW_GLOBAL])   # Tafelschrauben
+    m = dif(m, *[cyz(1.6, BAR_H + 3, lx, 0, BAR_H / 2) for lx in SCREW_GLOBAL])   # Durchgang Tafelschrauben
     # Senkrechte Schrauben von oben durch den Arm in die Schelle (Durchgangsbohrung)
     m = dif(m, *[cyz(1.6, 10, POLE_X + sx * ARM_SCREW_DX, ARM_SCREW_Y_G, BAR_H / 2)
                  for sx in (-1, 1)])
     return m
 
 def part_clamp():
-    """Eckige Schelle um den Vierkantmast. Ein Schlitz durch beide Waende macht sie
-    zur Klemme: die Schraube quer (Achse X) zieht die beiden Haelfte zusammen.
-    Oben liegt eine ebene Auflage, auf die der Querbalkenarm geschraubt wird."""
+    """Eckige Schelle um den Vierkantmast. Ein Schlitz in der RUECKWAND macht sie zur
+    Klemme (vorne bleibt ein Steg als Scharnier): die Schraube quer (Achse X) zieht
+    die beiden Schlitzseiten zusammen. Oben liegt die Auflage fuer den Balkenarm."""
     zc = CLAMP_H / 2
     ow, od = POLE_W + 2 * CLAMP_T, POLE_D + 2 * CLAMP_T
-    yf = -(POLE_D / 2 + CLAMP_T)                     # Stirnebene (lokal, vor dem Mast)
+    yc = POLE_D / 2 + CLAMP_T / 2                     # Mitte der Rueckwand
     m = bx(ow, od, CLAMP_H, 0, 0, zc)
     m = dif(m, bx(POLE_W + 0.4, POLE_D + 0.4, CLAMP_H + 4, 0, 0, zc))   # Mastdurchlass
-    m = dif(m, bx(SLIT_W, od + 6, CLAMP_H + 4, 0, 0, zc))               # Schlitz
-    # Klemmschraube quer (Achse X) durch die Rueckwand, mit Kopfsenke
-    m = dif(m, cyx(SCREW_R, ow + 8, 0, POLE_D / 2 + CLAMP_T / 2, zc))
-    m = dif(m, cyx(SCREW_R + 1.5, 3.0, -(ow / 2 - 0.6), POLE_D / 2 + CLAMP_T / 2, zc))
+    # Schlitz nur in der Rueckwand -> Klemme mit Scharnier, zerfaellt nicht
+    m = dif(m, bx(SLIT_W, CLAMP_T + 2.0, CLAMP_H + 4, 0, yc, zc))
+    # Klemmschraube quer (Achse X), beide Bohrungen auf derselben Achse:
+    # links Durchgang, rechts Kernloch -> die Schraube zieht den Schlitz zu
+    m = dif(m, cyx(SCREW_R, 9.0, -(SLIT_W / 2 + 4.5), yc, zc))                # links Durchgang
+    m = dif(m, cyx(SCREW_R - 0.35, 7.0, SLIT_W / 2 + 3.5, yc, zc))            # rechts Kernloch
+    m = dif(m, cyx(SCREW_R + 1.5, 3.0, -(ow / 2 - 0.6), yc, zc))              # Kopfsenke
     # Gewinde fuer den Querbalkenarm (senkrecht von oben)
-    m = dif(m, *[cyz(1.25, 5.0, sx * ARM_SCREW_DX, ARM_SCREW_Y, CLAMP_H - 2.5)
+    m = dif(m, *[cyz(1.25, 6.5, sx * ARM_SCREW_DX, ARM_SCREW_Y, CLAMP_H - 3.25)
                  for sx in (-1, 1)])
     return m
 

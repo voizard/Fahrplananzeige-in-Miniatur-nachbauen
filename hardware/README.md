@@ -50,7 +50,7 @@ and the product page (62 × 26 × 10 mm, USB-C on the short edge).
 | Bezel | 78.0 × 42.0 × 16.0 | window 45 × 25, corner R2.0, glass recess inside |
 | Back cover | 78.0 × 42.0 × 3.7 | lip 1.2 mm, 4 pressure pads (4.7 mm inward), vents |
 | Crossbar | 88.0 × 22.0 × 6.0 | overhangs the bezel 5 mm per side, arm to the clamp |
-| Pole clamp | 20.0 × 17.0 × 10.0 | slit through both walls, clamp screw, arm screws on top |
+| Pole clamp | 20.0 × 17.0 × 10.0 | slit in the rear wall, clamp screw, arm screws on top |
 | Pole | 12.0 × 9.0 (square), hollow | cable runs inside |
 | Base | 120.0 × 90.0 × 16.0 | hollow, routed cable channel |
 
@@ -67,20 +67,32 @@ the board corner).
 
 ## How the parts are held together
 
-Mostly **screwed** — one joint is a plain push fit. All screws are M3, and every
-hole is sized for a self-tapping M3 (1.25 mm pilot radius) except the clamp
-screw, which passes through a 1.6 mm hole.
+Mostly **screwed** — one joint is a plain push fit. All screws are **M3**; every
+hole is sized for a self-tapping M3 (2.5 mm pilot) except the clearance holes
+(3.2 mm) and the countersunk clamp screw.
 
-| Joint | How | Screws |
+| Joint | How | Screw |
 |---|---|---|
-| Bezel ↔ back cover | screwed through the four bosses | 4 × M3 × 12 |
-| Crossbar ↔ bezel | screwed from above into the bezel's top wall | 2 × M3 |
-| Crossbar arm ↔ clamp | screwed from above, arm rests on the clamp top | 2 × M3 |
-| Clamp ↔ pole | clamp screw squeezes the slit | 1 × M3 |
+| Bezel ↔ back cover | through the cover into the four bosses | 4 × M3 × 12 |
+| Crossbar ↔ bezel | from above into the bezel's top wall | 2 × M3 × 12 |
+| Crossbar arm ↔ clamp | from above, arm rests on the clamp top | 2 × M3 × 12 |
+| Clamp ↔ pole | countersunk screw across the slit | 1 × M3 × 16 |
 | Pole ↔ base | **push fit** into the socket — no screw | — |
 
-So you only need a screwdriver for the display cover and the head assembly; the
-pole simply plugs into the base. Nine M3 screws in total.
+That is **9 M3 screws** in total (8 × 12 mm + 1 × 16 mm countersunk). PLA is soft,
+so ordinary steel screws work fine — a light hand is enough, they cut their own
+thread. Do not overtighten: the pilot holes are sized so the screw bites without
+splitting the wall.
+
+```
+4 × M3 × 12   cylinder head (DIN 912)   cover -> bezel bosses
+2 × M3 × 12   cylinder head (DIN 912)   crossbar -> bezel top
+2 × M3 × 12   cylinder head (DIN 912)   arm -> clamp
+1 × M3 × 16   countersunk  (DIN 965)    clamp -> pole
+```
+
+If you want stainless: A2 works. You only need a screwdriver for the display
+cover and the head assembly; the pole simply plugs into the base.
 
 ## Part list
 
@@ -124,8 +136,8 @@ files sit next to it, in case a print service prefers those.
 5. Screw the crossbar to the top of the bezel with **2 × M3** from above, then
    lower the panel onto the clamp and screw the arm down with **2 × M3** from
    above. The arm rests flat on the clamp top.
-6. Tighten the clamp with **1 × M3** through the slit — this is what pinches the
-   clamp onto the pole.
+6. Tighten the clamp with **1 × M3** (countersunk) — the screw pulls the slit in
+   the rear wall shut and pinches the clamp onto the pole.
 7. Run the cable down the pole and plug it into the panel-mount socket in the
    base wall.
 

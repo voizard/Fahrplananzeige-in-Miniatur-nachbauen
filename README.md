@@ -69,6 +69,19 @@ static int zahlAus(JsonVariantConst v, int standard) {
 Pin mapping and display init come from the LilyGO repo
 (`Xinyuan-LilyGO/T-Display-S3`).
 
+## Holder (3D print)
+
+The `hardware/` folder contains a 3D-printable miniature of the VAG DFI sign the
+board imitates: a black bezel for the display, the red crossbar above it, a
+square white pole and a base with a routed cable channel. Six parts, ~57 g of
+PLA, no supports. The window shows only the screen (45 × 25 mm) and the board is
+centred by a glass recess inside the bezel.
+
+![Holder, front view](hardware/preview/montage_vorn.png)
+
+Build guide, part list, dimensions and the fit-check scripts:
+**[hardware/README.md](hardware/README.md)**.
+
 ## Structure
 
 ```
@@ -82,6 +95,12 @@ tram-display/
 │   └── (config.h)            not in the repo -- WiFi credentials, create from template
 ├── src/
 │   └── main.cpp              Firmware
+├── hardware/                3D-printable holder (see hardware/README.md)
+│   ├── build_bracket.py      Part definitions + fit check
+│   ├── board_fit.py          Places the official board model in the bezel
+│   ├── get_board_model.py    Fetches the LilyGO model (not redistributed)
+│   ├── stl/                  STL + 3MF exports
+│   └── preview/              Rendered previews and the dimensioned drawing
 └── docs/
     ├── dfi_vorschau.png      Preview of the DFI look
     ├── littenweiler_vorschau.png  Preview of the Littenweiler filter

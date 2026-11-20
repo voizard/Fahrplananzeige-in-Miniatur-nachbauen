@@ -10,3 +10,14 @@ include/config.h
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+
+# Third-party CAD (LilyGO T-Display S3, MIT) -- not redistributed.
+# Fetch on demand:  python3 hardware/get_board_model.py
+hardware/ref/
+
+# Local scratch renders
+hardware/preview/_*.png

@@ -70,15 +70,17 @@ BAR_X1 = PANEL_X + GH_W / 2 + BAR_OVER            # +18,0
 BAR_Y0, BAR_Y1 = -5.0, 5.0
 BAR_H = 6.0
 ARM_HW = 6.0                                      # halbe Armbreite
-ARM_Y1 = 13.0                                     # Armende (Schellen-Stirn)
-JOINT_Y = 12.0                                    # Schraubebene Balkenarm <-> Schelle
+ARM_Y1 = 17.0                                     # Armende: reicht ueber die Schellen-Auflage
+ARM_SCREW_DX = 3.5                                # Schraubenabstand quer
+ARM_SCREW_Y = -6.5                                # Schraubenebene (lokal, in der Schellen-Frontwand)
+ARM_SCREW_Y_G = POLE_Y + ARM_SCREW_Y              # 15,5 global
 SCREW_DX = 24.0                                   # Schraubenabstand, ab Tafelmitte
 SCREW_LOCAL = (-SCREW_DX, SCREW_DX)               # in der Blende (lokal)
 SCREW_GLOBAL = (PANEL_X - SCREW_DX, PANEL_X + SCREW_DX)   # im Balken (global)
 
-# Schelle
+# Schelle -- Oberkante liegt auf der Balkenunterkante (SIGN_Z1)
 CLAMP_T, CLAMP_H, SLIT_W, SCREW_R = 4.0, 10.0, 2.0, 1.6
-CLAMP_Z0, CLAMP_Z1 = 174.0, 184.0
+CLAMP_Z0, CLAMP_Z1 = SIGN_Z1 - CLAMP_H, SIGN_Z1
 
 # Sockel
 BASE_X, BASE_Y, BASE_H = 120.0, 90.0, 16.0         # flacher Sockel
@@ -172,7 +174,7 @@ def part_cover():
     m = dif(m, *[cyy(1.4, BACK_T + 6, x, GH_D / 2 + BACK_T / 2, zc + z) for x, z in P])
     lx = POLE_X - PANEL_X                                # Kabelstutzen auf Mastachse
     lz = CABLE_Z - SIGN_Z0
-    m = uni(m, cyy(6.0, 11.0, lx, GH_D / 2 + 5.0, lz))   # Stutzen zur Mastwand
+    m = uni(m, cyy(6.0, 11.0, lx, GH_D / 2 + 5.5, lz))   # Stutzen zur Mastwand
     m = dif(m, cyy(4.0, 18.0, lx, GH_D / 2 + 5.0, lz))   # Kabeldurchfuehrung
     vents = [bx(3.0, BACK_T + 4, 1.6, i * 6.0, GH_D / 2 + BACK_T / 2, zc + sz * 15.0)
              for i in range(-2, 3) for sz in (-1, 1)]
@@ -185,21 +187,27 @@ def part_crossbar():
     arm = bx(2 * ARM_HW, ARM_Y1 - BAR_Y1, BAR_H, POLE_X, (BAR_Y1 + ARM_Y1) / 2, BAR_H / 2)
     m = uni(rail, arm)
     m = dif(m, *[cyz(1.25, 6, lx, 0, 1.0) for lx in SCREW_GLOBAL])   # Tafelschrauben
-    m = dif(m, *[cyy(1.6, 12, POLE_X + sx * 3.0, JOINT_Y, BAR_H / 2)
-                 for sx in (-1, 1)])                                 # Schellenschrauben
+    # Senkrechte Schrauben von oben durch den Arm in die Schelle (Durchgangsbohrung)
+    m = dif(m, *[cyz(1.6, 10, POLE_X + sx * ARM_SCREW_DX, ARM_SCREW_Y_G, BAR_H / 2)
+                 for sx in (-1, 1)])
     return m
 
 def part_clamp():
-    """Eckige Schelle um den Vierkantmast; der Balkenarm schraubt an die Stirnflaeche."""
+    """Eckige Schelle um den Vierkantmast. Ein Schlitz durch beide Waende macht sie
+    zur Klemme: die Schraube quer (Achse X) zieht die beiden Haelfte zusammen.
+    Oben liegt eine ebene Auflage, auf die der Querbalkenarm geschraubt wird."""
     zc = CLAMP_H / 2
     ow, od = POLE_W + 2 * CLAMP_T, POLE_D + 2 * CLAMP_T
     yf = -(POLE_D / 2 + CLAMP_T)                     # Stirnebene (lokal, vor dem Mast)
     m = bx(ow, od, CLAMP_H, 0, 0, zc)
     m = dif(m, bx(POLE_W + 0.4, POLE_D + 0.4, CLAMP_H + 4, 0, 0, zc))   # Mastdurchlass
     m = dif(m, bx(SLIT_W, od + 6, CLAMP_H + 4, 0, 0, zc))               # Schlitz
-    m = dif(m, cyy(SCREW_R, ow + 8, 0, 0, zc))                          # Klemmschraube
-    m = uni(m, bx(2 * ARM_HW + 4, 3.0, CLAMP_H, 0, yf - 1.5, zc))       # Anschraubflaeche
-    m = dif(m, *[cyy(1.6, 14, sx * 3.0, yf - 1.5, zc) for sx in (-1, 1)])
+    # Klemmschraube quer (Achse X) durch die Rueckwand, mit Kopfsenke
+    m = dif(m, cyx(SCREW_R, ow + 8, 0, POLE_D / 2 + CLAMP_T / 2, zc))
+    m = dif(m, cyx(SCREW_R + 1.5, 3.0, -(ow / 2 - 0.6), POLE_D / 2 + CLAMP_T / 2, zc))
+    # Gewinde fuer den Querbalkenarm (senkrecht von oben)
+    m = dif(m, *[cyz(1.25, 5.0, sx * ARM_SCREW_DX, ARM_SCREW_Y, CLAMP_H - 2.5)
+                 for sx in (-1, 1)])
     return m
 
 def part_pole():

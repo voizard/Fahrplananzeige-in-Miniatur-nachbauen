@@ -49,8 +49,8 @@ and the product page (62 × 26 × 10 mm, USB-C on the short edge).
 |---|---|---|
 | Bezel | 78.0 × 42.0 × 16.0 | window 45 × 25, corner R2.0, glass recess inside |
 | Back cover | 78.0 × 42.0 × 3.7 | lip 1.2 mm, 4 pressure pads (4.7 mm inward), vents |
-| Crossbar | 88.0 × 10.0 × 6.0 | overhangs the bezel 5 mm per side, arm to the clamp |
-| Pole clamp | 20.0 × 20.0 × 10.0 | square, for the square pole |
+| Crossbar | 88.0 × 22.0 × 6.0 | overhangs the bezel 5 mm per side, arm to the clamp |
+| Pole clamp | 20.0 × 17.0 × 10.0 | slit through both walls, clamp screw, arm screws on top |
 | Pole | 12.0 × 9.0 (square), hollow | cable runs inside |
 | Base | 120.0 × 90.0 × 16.0 | hollow, routed cable channel |
 
@@ -64,6 +64,23 @@ no screws in the visible area.
 against the back cover; the display protrudes into the recess at the front. The
 four screw bosses (R2.5) sit outside the board and do not touch it (4.2 mm to
 the board corner).
+
+## How the parts are held together
+
+Mostly **screwed** — one joint is a plain push fit. All screws are M3, and every
+hole is sized for a self-tapping M3 (1.25 mm pilot radius) except the clamp
+screw, which passes through a 1.6 mm hole.
+
+| Joint | How | Screws |
+|---|---|---|
+| Bezel ↔ back cover | screwed through the four bosses | 4 × M3 × 12 |
+| Crossbar ↔ bezel | screwed from above into the bezel's top wall | 2 × M3 |
+| Crossbar arm ↔ clamp | screwed from above, arm rests on the clamp top | 2 × M3 |
+| Clamp ↔ pole | clamp screw squeezes the slit | 1 × M3 |
+| Pole ↔ base | **push fit** into the socket — no screw | — |
+
+So you only need a screwdriver for the display cover and the head assembly; the
+pole simply plugs into the base. Nine M3 screws in total.
 
 ## Part list
 
@@ -102,11 +119,14 @@ files sit next to it, in case a print service prefers those.
    (1.25 mm radius). The four pads push the board forward.
 3. Plug the USB-C extension into the board and feed the cable through the
    grommet on the back cover.
-4. Press the crossbar onto the two ridges of the housing — the ridges sit in the
-   matching slots; a drop of glue holds them.
-5. Push the pole into the base socket, slide the clamp over the pole, push the
-   crossbar end into the clamp and tighten with **1 × M3**.
-6. Run the cable down the pole and plug it into the panel-mount socket in the
+4. Slide the clamp onto the pole and push the pole into the base socket (a
+   plain push fit — no screw here). Set the clamp at the height of the crossbar.
+5. Screw the crossbar to the top of the bezel with **2 × M3** from above, then
+   lower the panel onto the clamp and screw the arm down with **2 × M3** from
+   above. The arm rests flat on the clamp top.
+6. Tighten the clamp with **1 × M3** through the slit — this is what pinches the
+   clamp onto the pole.
+7. Run the cable down the pole and plug it into the panel-mount socket in the
    base wall.
 
 **No sand.** The base is hollow and stays empty — the 120 × 90 mm footprint is
